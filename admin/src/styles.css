@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@theme {
+  --color-mhr-navy: #102a43;
+  --color-mhr-navy-light: #1c3a5e;
+  --color-mhr-gold: #b8893a;
+}
+
+body {
+  @apply bg-slate-50 text-mhr-navy antialiased;
+}
+
+/* Campos e botões padrão do painel: definidos uma vez aqui para o visual ficar
+   consistente em todas as telas, em vez de repetir a mesma sopa de classes. */
+@layer components {
+  .campo {
+    @apply w-full rounded-lg border border-slate-300 px-3 py-2 text-sm transition
+      focus:border-mhr-gold focus:outline-none focus:ring-2 focus:ring-mhr-gold/30;
+  }
+
+  .botao-primario {
+    @apply rounded-lg bg-mhr-navy px-4 py-2 text-sm font-medium text-white transition
+      hover:bg-mhr-navy-light disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .botao-destaque {
+    @apply rounded-lg bg-mhr-gold px-4 py-2 text-sm font-medium text-white transition
+      hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .botao-link {
+    @apply text-sm font-medium text-mhr-gold transition hover:underline;
+  }
+
+  .cartao {
+    @apply rounded-lg border border-slate-200 bg-white p-4 shadow-sm;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+}

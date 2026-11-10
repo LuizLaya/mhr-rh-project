@@ -1,0 +1,26 @@
+# Backend (Gradle)
+backend/.gradle/
+backend/build/
+backend/out/
+!backend/gradle/wrapper/gradle-wrapper.jar
+
+# Imagens enviadas pelo admin (foto de depoimento, capa de post, logo de cliente,
+# foto de equipe) - disco local, nao faz parte do codigo-fonte (ver UploadService).
+backend/uploads/
+
+# Frontend (Node)
+node_modules/
+site/dist/
+site/.astro/
+admin/dist/
+
+# Env files
+.env
+*.env.local
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

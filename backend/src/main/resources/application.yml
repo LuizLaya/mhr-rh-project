@@ -1,0 +1,103 @@
+spring:
+  application:
+    name: mhr-backend
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/mhr}
+    username: ${DB_USER:mhr}
+    password: ${DB_PASSWORD:mhr}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+server:
+  port: ${PORT:8080}
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:change-me-in-env-this-is-a-local-dev-only-secret-value}
+    # 8h (um dia de trabalho) - evita que o admin precise logar de novo no meio do
+    # expediente so por o token ter vencido (confundia com bug real antes).
+    expiration-minutes: ${JWT_EXPIRATION_MINUTES:480}
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4321,http://localhost:5173}
+  admin:
+    default-email: ${ADMIN_EMAIL:admin@mhr.com.br}
+    default-password: ${ADMIN_PASSWORD:admin123}
+  mail:
+    # Endereco que aparece no campo "De" dos e-mails. Alguns provedores (ex.: Resend)
+    # usam um usuario SMTP fixo que nao e um e-mail valido, entao o remetente real
+    # precisa ser configurado a parte. Sem MAIL_FROM, cai de volta para MAIL_USERNAME
+    # (caso do Gmail, onde usuario SMTP e remetente sao o mesmo endereco).
+    remetente: ${MAIL_FROM:${MAIL_USERNAME:}}
+  # URL do painel admin (React), usada para montar o link de redefinicao de senha
+  # enviado por e-mail. MAIL_USERNAME/MAIL_PASSWORD vazios = o link so vai para o log.
+  frontend-admin-url: ${FRONTEND_ADMIN_URL:http://localhost:5173}
+  licitacoes:
+    # UFs consultadas na busca automatica no PNCP (separadas por virgula). So roda
+    # quando o admin liga a busca na tela Licitacoes (ver ConfiguracaoLicitacoes).
+    # As palavras-chave nao ficam mais aqui - viraram editaveis na propria tela
+    # de Licitacoes (coluna palavras_chave de ConfiguracaoLicitacoes, migration V9).
+    ufs: ${LICITACOES_UFS:DF}
+  uploads:
+    # Pasta local (relativa ao diretorio de trabalho do processo) onde os arquivos
+    # enviados pelo admin (foto de depoimento, capa de post, logo de cliente) sao
+    # salvos quando o storage R2 abaixo nao esta configurado, servida em /uploads/**.
+    # Disco local: funciona bem em desenvolvimento, mas NAO sobrevive a um redeploy
+    # na maioria dos free tiers (filesystem efemero) - usado só como fallback de dev.
+    dir: ${UPLOADS_DIR:uploads}
+  storage:
+    r2:
+      # Storage de objeto (Cloudflare R2, compativel com a API do S3) para os uploads
+      # de imagem sobreviverem a um redeploy em producao. Sem as 4 variaveis abaixo
+      # configuradas, o UploadService cai de volta pro disco local (app.uploads.dir) -
+      # nenhuma delas e obrigatoria para rodar em desenvolvimento.
+      access-key: ${R2_ACCESS_KEY_ID:}
+      secret-key: ${R2_SECRET_ACCESS_KEY:}
+      bucket: ${R2_BUCKET_NAME:}
+      endpoint: ${R2_ENDPOINT:}
+      # URL publica de leitura do bucket (dominio padrao pub-xxxx.r2.dev, ou um
+      # dominio customizado configurado no painel da Cloudflare) - NAO e o endpoint
+      # da API acima (que é so para upload/gestao, nao e navegavel publicamente).
+      public-url: ${R2_PUBLIC_URL:}
+  turnstile:
+    # Chave secreta de teste publicada pela Cloudflare (sempre aprova) - funciona em
+    # desenvolvimento local sem conta na Cloudflare. Troque por uma chave real
+    # (dashboard da Cloudflare > Turnstile) antes de qualquer uso em producao, senao
+    # o anti-spam dos formularios publicos nao protege nada de verdade.
+    secret-key: ${TURNSTILE_SECRET_KEY:1x0000000000000000000000000000000AA}
+
+springdoc:
+  swagger-ui:
+    path: /docs
+  api-docs:
+    path: /v3/api-docs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  health:
+    # Sem MAIL_USERNAME/MAIL_PASSWORD configurados, o indicador de saude do mail tentava
+    # conectar no SMTP a cada /actuator/health e derrubava o health check inteiro.
+    mail:
+      enabled: false

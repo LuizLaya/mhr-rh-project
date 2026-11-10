@@ -1,0 +1,84 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { buscarEquipe, type MembroEquipe } from "../lib/api";
+
+let equipe: MembroEquipe[] = [];
+try {
+  equipe = await buscarEquipe();
+} catch {
+  equipe = [];
+}
+---
+
+<BaseLayout
+  title="Sobre a MHR"
+  description="Consultoria de RH fundada em 2024, em Brasília/DF, com mais de uma década de experiência em recrutamento e treinamento."
+>
+  <section class="mx-auto max-w-3xl px-4 py-16">
+    <h1 class="text-3xl font-bold text-mhr-navy">Sobre a MHR</h1>
+
+    <p class="mt-6 text-slate-700">
+      A MHR nasceu em 2024, em Brasília, a partir da experiência prática de mais de uma
+      década da nossa CEO como recrutadora e formadora de equipes e lideranças. Esse
+      tempo de estrada mostrou uma coisa simples: cada empresa — e cada vaga — tem uma
+      necessidade diferente, e um RH de verdade precisa saber atender dos dois jeitos.
+    </p>
+
+    <p class="mt-4 text-slate-700">
+      É esse o nosso principal diferencial: a MHR atende tanto o público em geral quanto
+      o público específico. Da operação enxuta ao cargo estratégico, da seleção em
+      volume ao perfil difícil de encontrar — temos um processo pensado para cada caso,
+      sem soluções de prateleira.
+    </p>
+
+    <div class="mt-10 grid gap-6 md:grid-cols-3">
+      <div class="rounded border border-slate-200 p-5">
+        <h2 class="font-semibold text-mhr-navy">Missão</h2>
+        <p class="mt-2 text-sm text-slate-600">
+          Conectar pessoas certas a empresas certas, com processos de RH sob medida que
+          geram resultado de verdade — para o negócio e para quem é selecionado.
+        </p>
+      </div>
+      <div class="rounded border border-slate-200 p-5">
+        <h2 class="font-semibold text-mhr-navy">Visão</h2>
+        <p class="mt-2 text-sm text-slate-600">
+          Ser reconhecida em Brasília e no Distrito Federal como a consultoria de RH que
+          resolve tanto o volume quanto a exceção.
+        </p>
+      </div>
+      <div class="rounded border border-slate-200 p-5">
+        <h2 class="font-semibold text-mhr-navy">Valores</h2>
+        <ul class="mt-2 list-inside list-disc text-sm text-slate-600">
+          <li>Pessoas no centro de toda decisão</li>
+          <li>Resultado mensurável, não só processo</li>
+          <li>Atendimento sob medida</li>
+          <li>Transparência com empresas e candidatos</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="mt-10 text-sm text-slate-500">
+      <!-- NOTA INTERNA: textos de missão/visão/valores são um rascunho inicial — ajuste
+      livremente antes de publicar em produção. -->
+      Sede em Brasília/DF.
+    </p>
+
+    {equipe.length > 0 && (
+      <div class="mt-16">
+        <h2 class="text-2xl font-bold text-mhr-navy">Equipe</h2>
+        <div class="mt-6 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+          {equipe.map((membro) => (
+            <div class="rounded border border-slate-200 p-5 text-center">
+              {membro.fotoUrl && (
+                <img src={membro.fotoUrl} alt={membro.nome} class="mx-auto h-20 w-20 rounded-full object-cover" />
+              )}
+              <h3 class="mt-3 font-semibold text-mhr-navy">{membro.nome}</h3>
+              {membro.cargo && <p class="text-sm text-mhr-gold">{membro.cargo}</p>}
+              {membro.bio && <p class="mt-2 text-sm text-slate-600">{membro.bio}</p>}
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </section>
+</BaseLayout>

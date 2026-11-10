@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+@theme {
+  --color-mhr-navy: #102a43;
+  --color-mhr-navy-light: #1c3a5e;
+  --color-mhr-gold: #b8893a;
+  --color-mhr-gold-light: #d4ab63;
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+body {
+  @apply bg-white text-mhr-navy antialiased;
+}
+
+@layer components {
+  .campo {
+    @apply w-full rounded-lg border border-slate-300 px-3 py-2 transition
+      focus:border-mhr-gold focus:outline-none focus:ring-2 focus:ring-mhr-gold/30;
+  }
+
+  .botao-primario {
+    @apply inline-block rounded-lg bg-mhr-navy px-6 py-3 font-medium text-white transition
+      hover:bg-mhr-navy-light disabled:cursor-not-allowed disabled:opacity-50;
+  }
+}

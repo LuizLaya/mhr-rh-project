@@ -1,0 +1,20 @@
+---
+import { EMAIL_CONTATO, CIDADE, WHATSAPP_URL } from "../lib/contato";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-20 bg-mhr-navy py-10 text-white">
+  <div class="mx-auto flex max-w-6xl flex-col items-center gap-4 px-4 text-center">
+    <img src="/brand/logo-light.png" alt="MHR" class="h-10 w-auto" />
+    <p class="text-sm text-slate-300">Pessoas certas. Resultados certos.</p>
+    <p class="text-sm text-slate-300">
+      {CIDADE} ·{" "}
+      <a href={`mailto:${EMAIL_CONTATO}`} class="underline">{EMAIL_CONTATO}</a> ·{" "}
+      <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="underline">WhatsApp</a>
+    </p>
+    <p class="text-xs text-slate-400">
+      © {year} MHR. Todos os direitos reservados. · <a href="/privacidade" class="underline">Política de Privacidade</a>
+    </p>
+  </div>
+</footer>

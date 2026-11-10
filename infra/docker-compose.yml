@@ -1,0 +1,17 @@
+name: mhr-dev
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: mhr
+      POSTGRES_USER: mhr
+      POSTGRES_PASSWORD: mhr
+    ports:
+      - "5432:5432"
+    volumes:
+      - mhr_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  mhr_postgres_data:

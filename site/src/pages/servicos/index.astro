@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { buscarServicos } from "../../lib/api";
+
+let servicos: Awaited<ReturnType<typeof buscarServicos>> = [];
+try {
+  servicos = await buscarServicos();
+} catch {
+  servicos = [];
+}
+---
+
+<BaseLayout title="Serviços" description="Conheça os serviços de RH da MHR.">
+  <section class="mx-auto max-w-6xl px-4 py-16">
+    <h1 class="text-3xl font-bold text-mhr-navy">Nossos serviços</h1>
+
+    {servicos.length === 0 && (
+      <p class="mt-6 text-slate-600">Nenhum serviço cadastrado no momento.</p>
+    )}
+
+    <div class="mt-8 grid gap-6 md:grid-cols-2">
+      {servicos.map((servico) => (
+        <a href={`/servicos/${servico.slug}`} class="rounded border border-slate-200 p-6 hover:border-mhr-gold">
+          <h2 class="text-xl font-semibold text-mhr-navy">{servico.titulo}</h2>
+          <p class="mt-2 text-slate-600">{servico.resumo}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

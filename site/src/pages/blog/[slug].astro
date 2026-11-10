@@ -1,0 +1,41 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { buscarPostsBlog, type PostBlog } from "../../lib/api";
+
+// output: "static" -> rotas dinamicas precisam saber todos os paths em build time
+// (mesmo padrao de site/src/pages/servicos/[slug].astro). Um post novo só aparece
+// aqui depois de um novo build/deploy do site.
+export async function getStaticPaths() {
+  let posts: PostBlog[] = [];
+  try {
+    posts = await buscarPostsBlog();
+  } catch {
+    posts = [];
+  }
+
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props as { post: PostBlog };
+---
+
+<BaseLayout title={post.titulo} description={post.resumo}>
+  <section class="mx-auto max-w-3xl px-4 py-16">
+    <a href="/blog" class="text-sm text-mhr-gold hover:underline">&larr; Todos os posts</a>
+    {post.categoria && (
+      <p class="mt-4 text-xs font-semibold uppercase tracking-wide text-mhr-gold">{post.categoria}</p>
+    )}
+    <h1 class="mt-1 text-3xl font-bold text-mhr-navy">{post.titulo}</h1>
+    {post.urlImagemCapa && (
+      <img src={post.urlImagemCapa} alt={post.titulo} class="mt-6 w-full rounded object-cover" />
+    )}
+    <p class="mt-6 whitespace-pre-line text-slate-700">{post.conteudo}</p>
+
+    <a href="/contato" class="botao-primario mt-10">
+      Fale com a gente
+    </a>
+  </section>
+</BaseLayout>

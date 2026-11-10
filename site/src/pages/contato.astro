@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ContactForm from "../components/react/ContactForm";
+import { EMAIL_CONTATO, CIDADE, WHATSAPP_URL } from "../lib/contato";
+---
+
+<BaseLayout title="Contato" description="Fale com a MHR sobre consultoria de RH em Brasília/DF.">
+  <section class="mx-auto max-w-xl px-4 py-16">
+    <h1 class="text-3xl font-bold text-mhr-navy">Fale com a gente</h1>
+    <p class="mt-4 text-slate-600">
+      Buscando algo além ou com alguma dúvida? Preencha o formulário abaixo ou fale
+      direto com a gente.
+    </p>
+
+    <div class="mt-4 flex flex-col gap-1 text-sm text-slate-600">
+      <p>{CIDADE}</p>
+      <p>
+        <a href={`mailto:${EMAIL_CONTATO}`} class="text-mhr-gold hover:underline">{EMAIL_CONTATO}</a>
+      </p>
+      <p>
+        <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="text-mhr-gold hover:underline">
+          Chamar no WhatsApp
+        </a>
+      </p>
+    </div>
+
+    <div class="mt-8">
+      <ContactForm client:load />
+    </div>
+  </section>
+</BaseLayout>
